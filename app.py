@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from flask import Flask, request, jsonify
 from models.task import Task
 
@@ -89,4 +90,27 @@ def delete_task(id):
 
 
 if __name__ == "__main__":
+=======
+# Importa a classe Flask do módulo flask
+from flask import Flask
+
+# Cria uma instância do aplicativo Flask
+app = Flask(__name__)
+
+# Define uma rota para a URL raiz ("/")
+@app.route("/")
+def hello_world():
+    # Retorna uma resposta simples quando o usuário acessa a página inicial
+    return("200")
+
+# Define uma rota para a URL "/about"
+@app.route("/about")
+def sobre():
+    # Retorna uma mensagem quando o usuário acessa a página "Sobre"
+    return "Página Sobre Games"
+
+# Verifica se o script está sendo executado localmente (e não importado como módulo)
+if __name__ == "__main__":
+    # Inicia o servidor em modo de depuração (debug=True)
+>>>>>>> 958899be32cfccdf46fa87821ffe245bc9f9a0a5
     app.run(debug=True)
