@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from flask import Flask, request, jsonify
 from models.task import Task
 
@@ -16,7 +15,7 @@ def create_task():
     new_task = Task(id=task_id_control,title=data['title'],description=data.get("description"))
     task_id_control += 1
     tasks.append(new_task)
-    return jsonify({"message": "Nova tarefa criada com sucesso!"}), 201
+    return jsonify({"message": "Nova tarefa criada com sucesso!","id":new_task.id}), 200
     
     return 'Test'
 
@@ -53,23 +52,27 @@ def show_user(user_id):
     return "%s" %user_id
 
 
-@app.route('/task/<int:id>',methods=["PUT"])
-
+@app.route('/task/<int:id>', methods=["PUT"])
 def update_task(id):
-    task = None
-    for t in tasks:
-        if t.id == id:
-            task = t
-    print(task)
-    if task == None:
-            return jsonify("Não foi possivel encontrar"),404
-    
+    task = next((t for t in tasks if t.id == id), None)
+
+    if task is None:
+        return jsonify({"message": "Tarefa não encontrada"}), 404
+
     data = request.get_json()
-    task.title = data['title']
-    task.description = data['description']  
-    task.completed = data['completed']
-    print(task)
-    return jsonify("Tarefa atualizda com sucesso"),200
+
+    task.title = data.get('title', task.title)
+    task.description = data.get('description', task.description)
+    task.completed = data.get('completed', task.completed)
+
+    # Retorna objeto atualizado no padrão esperado pelo teste
+    return jsonify({
+        "message": "Tarefa atualizada com sucesso",
+        "id": task.id,
+        "title": task.title,
+        "description": task.description,
+        "completed": task.completed
+    }), 200
 
 
 
@@ -90,27 +93,4 @@ def delete_task(id):
 
 
 if __name__ == "__main__":
-=======
-# Importa a classe Flask do módulo flask
-from flask import Flask
-
-# Cria uma instância do aplicativo Flask
-app = Flask(__name__)
-
-# Define uma rota para a URL raiz ("/")
-@app.route("/")
-def hello_world():
-    # Retorna uma resposta simples quando o usuário acessa a página inicial
-    return("200")
-
-# Define uma rota para a URL "/about"
-@app.route("/about")
-def sobre():
-    # Retorna uma mensagem quando o usuário acessa a página "Sobre"
-    return "Página Sobre Games"
-
-# Verifica se o script está sendo executado localmente (e não importado como módulo)
-if __name__ == "__main__":
-    # Inicia o servidor em modo de depuração (debug=True)
->>>>>>> 958899be32cfccdf46fa87821ffe245bc9f9a0a5
     app.run(debug=True)
